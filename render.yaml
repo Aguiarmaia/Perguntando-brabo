@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: quiz-battle
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false   # Você vai preencher manualmente no painel do Render
