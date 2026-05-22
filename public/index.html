@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuizBattle — Desafio em Dupla</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Perguntando Brabo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -22,20 +22,25 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Syne', sans-serif;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      justify-content: flex-start;
       position: relative;
+      padding-bottom: 60px; /* room for footer */
     }
 
-    /* Background grid */
     body::before {
       content: '';
       position: fixed;
@@ -55,31 +60,47 @@
       pointer-events: none;
       z-index: 0;
     }
-    .orb1 { width: 400px; height: 400px; background: rgba(245,197,24,0.08); top: -100px; left: -100px; }
-    .orb2 { width: 300px; height: 300px; background: rgba(232,67,147,0.08); bottom: -80px; right: -80px; }
+    .orb1 { width: 400px; height: 400px; background: rgba(245,197,24,0.07); top: -100px; left: -100px; }
+    .orb2 { width: 300px; height: 300px; background: rgba(232,67,147,0.07); bottom: 60px; right: -80px; }
 
     #app {
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 680px;
-      padding: 24px;
+      max-width: 600px;
+      padding: 20px 16px;
+      flex: 1;
     }
 
+    /* FOOTER */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 10;
+      text-align: center;
+      padding: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      background: linear-gradient(transparent, rgba(10,10,15,0.95));
+    }
+    footer span { color: var(--accent); }
+
     /* SCREENS */
-    .screen { display: none; animation: fadeIn 0.4s ease; }
+    .screen { display: none; animation: fadeIn 0.35s ease; }
     .screen.active { display: block; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* LOGO */
     .logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(52px, 12vw, 88px);
-      letter-spacing: 4px;
+      font-size: clamp(44px, 11vw, 80px);
+      letter-spacing: 3px;
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -87,14 +108,13 @@
       text-align: center;
       line-height: 1;
     }
-
     .tagline {
       text-align: center;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      margin-top: 8px;
+      margin-top: 6px;
       font-family: 'Space Mono', monospace;
     }
 
@@ -103,17 +123,16 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
-      margin-top: 32px;
+      padding: 24px 20px;
+      margin-top: 20px;
     }
-
     .card-title {
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--muted);
       font-family: 'Space Mono', monospace;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     /* INPUT */
@@ -126,10 +145,11 @@
       font-family: 'Syne', sans-serif;
       font-size: 16px;
       font-weight: 700;
-      padding: 14px 18px;
+      padding: 14px 16px;
       outline: none;
       transition: border-color 0.2s;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      -webkit-appearance: none;
     }
     input[type="text"]:focus { border-color: var(--accent); }
     input[type="text"]::placeholder { color: var(--muted); font-weight: 400; }
@@ -137,39 +157,40 @@
     /* BUTTONS */
     .btn {
       width: 100%;
-      padding: 15px 24px;
+      padding: 14px 20px;
       border: none;
       border-radius: 10px;
       font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       cursor: pointer;
       letter-spacing: 1px;
       text-transform: uppercase;
       transition: all 0.15s;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
-    .btn:active { transform: scale(0.98); }
+    .btn:active { transform: scale(0.97); }
     .btn:last-child { margin-bottom: 0; }
+    .btn:disabled { opacity: 0.5; cursor: default; }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #0a0a0f;
-    }
-    .btn-primary:hover { background: #f0b800; box-shadow: 0 0 24px rgba(245,197,24,0.3); }
+    .btn-primary { background: var(--accent); color: #0a0a0f; }
+    .btn-primary:hover:not(:disabled) { background: #f0b800; box-shadow: 0 0 24px rgba(245,197,24,0.3); }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 
-    .btn-danger {
-      background: var(--accent2);
-      color: white;
-    }
-    .btn-danger:hover { box-shadow: 0 0 24px rgba(232,67,147,0.3); }
+    .btn-pause { background: transparent; color: var(--yellow); border: 1px solid var(--yellow); }
+    .btn-pause:hover:not(:disabled) { background: rgba(245,158,11,0.1); }
+    .btn-pause.voted { background: rgba(245,158,11,0.15); }
+
+    .btn-skip { background: transparent; color: var(--accent2); border: 1px solid var(--accent2); }
+    .btn-skip:hover:not(:disabled) { background: rgba(232,67,147,0.1); }
+    .btn-skip.voted { background: rgba(232,67,147,0.15); }
+
+    .btn-resume { background: var(--green); color: #0a0a0f; }
+    .btn-resume:hover:not(:disabled) { box-shadow: 0 0 20px rgba(34,197,94,0.3); }
 
     /* ROOM CODE */
     .room-code-display {
@@ -177,26 +198,26 @@
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
     .room-code-display .label {
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 3px;
       color: var(--muted);
       font-family: 'Space Mono', monospace;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .room-code-display .code {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 56px;
-      letter-spacing: 12px;
+      font-size: clamp(40px, 10vw, 56px);
+      letter-spacing: 10px;
       color: var(--accent);
     }
 
     /* PLAYERS LIST */
-    .players-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .players-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
     .player-item {
       display: flex;
       align-items: center;
@@ -204,13 +225,13 @@
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       transition: border-color 0.3s;
     }
     .player-item.ready { border-color: var(--green); }
     .player-name { font-weight: 700; font-size: 15px; }
     .player-status {
-      font-size: 11px;
+      font-size: 10px;
       font-family: 'Space Mono', monospace;
       color: var(--muted);
       text-transform: uppercase;
@@ -218,15 +239,13 @@
     }
     .player-item.ready .player-status { color: var(--green); }
 
-    /* GENERATING SCREEN */
-    #generating-screen {
-      text-align: center;
-    }
+    /* GENERATING */
+    #generating-screen { text-align: center; padding-top: 60px; }
     .generating-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-      animation: spin-slow 3s linear infinite;
+      font-size: 56px;
+      margin-bottom: 16px;
       display: inline-block;
+      animation: spin-slow 3s linear infinite;
     }
     @keyframes spin-slow {
       0%   { transform: rotate(0deg) scale(1); }
@@ -235,27 +254,22 @@
     }
     .generating-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 36px;
+      font-size: 32px;
       letter-spacing: 4px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .generating-sub {
       font-family: 'Space Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-    .ai-dots {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 24px;
-    }
+    .ai-dots { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
     .ai-dot {
       width: 10px; height: 10px;
       background: var(--accent);
@@ -270,12 +284,10 @@
     }
 
     /* COUNTDOWN */
-    #countdown-screen {
-      text-align: center;
-    }
+    #countdown-screen { text-align: center; padding-top: 80px; }
     .countdown-number {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 180px;
+      font-size: clamp(120px, 30vw, 180px);
       line-height: 1;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
@@ -285,15 +297,15 @@
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.06); }
     }
     .countdown-text {
-      font-size: 14px;
+      font-size: 13px;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--muted);
       font-family: 'Space Mono', monospace;
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     /* QUESTION SCREEN */
@@ -301,25 +313,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 12px;
+      gap: 8px;
     }
     .question-counter {
       font-family: 'Space Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       letter-spacing: 2px;
-    }
-    .timer-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      white-space: nowrap;
     }
     #timer-display {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 36px;
+      font-size: 34px;
       color: var(--accent);
       line-height: 1;
-      min-width: 48px;
+      min-width: 44px;
       text-align: right;
     }
     #timer-display.danger { color: var(--red); animation: blink 0.5s infinite; }
@@ -330,7 +339,7 @@
       background: var(--border);
       border-radius: 999px;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
     #timer-bar {
       height: 100%;
@@ -341,86 +350,124 @@
     }
 
     .question-text {
-      font-size: clamp(18px, 4vw, 24px);
+      font-size: clamp(16px, 4.5vw, 22px);
       font-weight: 700;
       line-height: 1.4;
-      margin-bottom: 28px;
-      min-height: 70px;
+      margin-bottom: 16px;
+      min-height: 54px;
     }
 
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
-
     .option-btn {
       background: var(--bg);
       border: 2px solid var(--border);
       border-radius: 12px;
-      padding: 18px 16px;
+      padding: 14px 12px;
       color: var(--text);
       font-family: 'Syne', sans-serif;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
+      gap: 10px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 56px;
     }
     .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(245,197,24,0.05); }
-    .option-btn:active:not(:disabled) { transform: scale(0.98); }
+    .option-btn:active:not(:disabled) { transform: scale(0.97); }
     .option-btn:disabled { cursor: default; }
-
     .option-letter {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
+      font-size: 20px;
       color: var(--muted);
       line-height: 1;
-      min-width: 20px;
+      min-width: 18px;
     }
-
     .option-btn.selected { border-color: var(--accent); background: rgba(245,197,24,0.08); }
     .option-btn.selected .option-letter { color: var(--accent); }
-
     .option-btn.correct { border-color: var(--green); background: rgba(34,197,94,0.1); }
     .option-btn.correct .option-letter { color: var(--green); }
-
     .option-btn.wrong { border-color: var(--red); background: rgba(239,68,68,0.1); }
     .option-btn.wrong .option-letter { color: var(--red); }
+
+    /* ACTION BUTTONS ROW */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .action-row .btn { margin-bottom: 0; font-size: 12px; padding: 10px 12px; }
+
+    .vote-badge {
+      display: inline-block;
+      background: var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      margin-left: 4px;
+    }
+
+    /* PAUSED OVERLAY */
+    #paused-banner {
+      display: none;
+      text-align: center;
+      background: rgba(245,158,11,0.1);
+      border: 2px solid var(--yellow);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    #paused-banner.show { display: block; }
+    #paused-banner .pause-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: var(--yellow);
+    }
+    #paused-banner .pause-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
     /* OPPONENT STATUS */
     .opponent-status {
       text-align: center;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-top: 20px;
-      height: 20px;
-      transition: color 0.3s;
+      height: 18px;
     }
     .opponent-status.answered { color: var(--green); }
 
-    /* REVEAL OVERLAY */
+    /* REVEAL */
     .result-banner {
       text-align: center;
-      padding: 28px;
+      padding: 20px;
       border-radius: 16px;
-      margin-bottom: 24px;
-      transition: all 0.5s;
+      margin-bottom: 16px;
     }
     .result-banner.win { background: rgba(34,197,94,0.12); border: 2px solid var(--green); }
     .result-banner.lose { background: rgba(239,68,68,0.12); border: 2px solid var(--red); }
     .result-banner.draw { background: rgba(245,158,11,0.12); border: 2px solid var(--yellow); }
-
-    .result-emoji { font-size: 52px; margin-bottom: 8px; }
+    .result-emoji { font-size: 44px; margin-bottom: 6px; }
     .result-label {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 36px;
+      font-size: 32px;
       letter-spacing: 4px;
     }
     .result-banner.win .result-label { color: var(--green); }
@@ -429,14 +476,13 @@
 
     .next-timer {
       font-family: 'Space Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       text-align: center;
-      margin-top: 12px;
+      margin-top: 10px;
       letter-spacing: 2px;
     }
 
-    /* SCOREBOARD in reveal */
     .score-row {
       display: flex;
       align-items: center;
@@ -444,27 +490,52 @@
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px 18px;
-      margin-bottom: 10px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
     }
-    .score-row .s-name { font-weight: 700; }
-    .score-row .s-points { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); }
+    .score-row .s-name { font-weight: 700; font-size: 14px; }
+    .score-row .s-points { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--accent); }
+
+    /* GAME ENDING - countdown before winner */
+    #ending-screen { text-align: center; padding-top: 60px; }
+    .ending-count {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(100px, 28vw, 160px);
+      line-height: 1;
+      color: var(--accent2);
+      animation: pulse 1s ease infinite;
+    }
+    .ending-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .ending-scores { margin-top: 24px; }
 
     /* GAME OVER */
+    #gameover-screen { padding-top: 20px; }
     .winner-display {
       text-align: center;
-      padding: 40px 24px;
+      padding: 30px 20px 20px;
     }
-    .winner-trophy { font-size: 72px; margin-bottom: 16px; }
-    .winner-title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; color: var(--accent); }
-    .winner-name { font-size: 24px; font-weight: 700; margin-top: 8px; }
+    .winner-trophy { font-size: 64px; margin-bottom: 12px; }
+    .winner-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 10vw, 52px);
+      letter-spacing: 4px;
+      color: var(--accent);
+    }
+    .winner-name { font-size: 20px; font-weight: 700; margin-top: 6px; }
 
     /* ERROR */
     .error-msg {
       color: var(--red);
-      font-size: 13px;
+      font-size: 12px;
       font-family: 'Space Mono', monospace;
-      margin-top: 12px;
+      margin-top: 10px;
       display: none;
     }
     .error-msg.show { display: block; }
@@ -481,9 +552,18 @@
       75%  { content: '...'; }
     }
 
-    @media (max-width: 500px) {
+    /* MOBILE */
+    @media (max-width: 480px) {
       .options-grid { grid-template-columns: 1fr; }
-      .countdown-number { font-size: 130px; }
+      .room-code-display .code { font-size: 40px; letter-spacing: 8px; }
+      .card { padding: 18px 14px; }
+      body { justify-content: flex-start; }
+    }
+
+    @media (max-height: 700px) {
+      #app { padding-top: 10px; }
+      .winner-display { padding-top: 10px; }
+      .card { margin-top: 12px; }
     }
   </style>
 </head>
@@ -493,28 +573,30 @@
 
   <div id="app">
 
-    <!-- HOME SCREEN -->
+    <!-- HOME -->
     <div id="home-screen" class="screen active">
-      <div class="logo">QuizBattle</div>
-      <p class="tagline">Desafio em dupla · Conhecimento geral</p>
+      <div class="logo">Perguntando Brabo</div>
+      <p class="tagline">Desafio em dupla · Perguntas com IA</p>
       <div class="card">
         <p class="card-title">Entrar no jogo</p>
-        <input type="text" id="player-name" placeholder="Seu nome..." maxlength="20" />
+        <input type="text" id="player-name" placeholder="Seu nome..." maxlength="20" autocomplete="off" />
         <button class="btn btn-primary" onclick="createRoom()">⚡ Criar Sala</button>
-        <div style="display:flex;align-items:center;gap:12px;margin:8px 0">
+        <div style="display:flex;align-items:center;gap:10px;margin:6px 0">
           <div style="flex:1;height:1px;background:var(--border)"></div>
-          <span style="color:var(--muted);font-size:12px;font-family:'Space Mono',monospace">ou</span>
+          <span style="color:var(--muted);font-size:11px;font-family:'Space Mono',monospace">ou</span>
           <div style="flex:1;height:1px;background:var(--border)"></div>
         </div>
-        <input type="text" id="room-code-input" placeholder="Código da sala..." maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-family:'Bebas Neue',sans-serif;font-size:24px" />
+        <input type="text" id="room-code-input" placeholder="Código da sala..." maxlength="6"
+          style="text-transform:uppercase;letter-spacing:4px;font-family:'Bebas Neue',sans-serif;font-size:22px"
+          autocomplete="off" autocapitalize="characters" />
         <button class="btn btn-secondary" onclick="joinRoom()">Entrar na Sala</button>
         <p class="error-msg" id="home-error"></p>
       </div>
     </div>
 
-    <!-- LOBBY SCREEN -->
+    <!-- LOBBY -->
     <div id="lobby-screen" class="screen">
-      <div class="logo">QuizBattle</div>
+      <div class="logo">Perguntando Brabo</div>
       <div class="card">
         <p class="card-title">Sala de espera</p>
         <div class="room-code-display">
@@ -524,15 +606,15 @@
         <div class="players-list" id="players-list"></div>
         <button class="btn btn-primary" id="ready-btn" onclick="playerReady()">✓ Estou Pronto!</button>
         <button class="btn btn-secondary" onclick="leaveGame()">Sair</button>
-        <p style="text-align:center;color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;margin-top:16px" class="waiting-dots">Aguardando os dois jogadores ficarem prontos</p>
+        <p style="text-align:center;color:var(--muted);font-size:11px;font-family:'Space Mono',monospace;margin-top:12px" class="waiting-dots">Aguardando os dois ficarem prontos</p>
       </div>
     </div>
 
-    <!-- GENERATING SCREEN -->
+    <!-- GENERATING -->
     <div id="generating-screen" class="screen">
       <div class="generating-icon">🤖</div>
       <div class="generating-title">IA Criando Perguntas</div>
-      <p class="generating-sub">Preparando perguntas exclusivas para vocês<span class="waiting-dots"></span></p>
+      <p class="generating-sub">Preparando exclusivas para vocês<span class="waiting-dots"></span></p>
       <div class="ai-dots">
         <div class="ai-dot"></div>
         <div class="ai-dot"></div>
@@ -540,7 +622,7 @@
       </div>
     </div>
 
-    <!-- COUNTDOWN SCREEN -->
+    <!-- COUNTDOWN -->
     <div id="countdown-screen" class="screen">
       <div style="text-align:center">
         <p class="countdown-text">Começando em</p>
@@ -549,38 +631,65 @@
       </div>
     </div>
 
-    <!-- QUESTION SCREEN -->
+    <!-- QUESTION -->
     <div id="question-screen" class="screen">
       <div class="question-header">
         <span class="question-counter" id="q-counter">PERGUNTA 1 / 10</span>
-        <div class="timer-wrap">
-          <div id="timer-display">60</div>
-        </div>
+        <div id="timer-display">60</div>
       </div>
       <div class="timer-bar-wrap">
         <div id="timer-bar"></div>
       </div>
+
+      <!-- Paused banner -->
+      <div id="paused-banner">
+        <div class="pause-title">⏸ PAUSADO</div>
+        <div class="pause-sub" id="paused-sub">Tempo restante: <span id="paused-remaining">--</span>s</div>
+      </div>
+
       <div class="question-text" id="q-text"></div>
       <div class="options-grid" id="options-grid"></div>
+
+      <!-- Action buttons -->
+      <div class="action-row" id="action-row">
+        <button class="btn btn-pause" id="btn-pause" onclick="votePause()">
+          ⏸ Pausar <span class="vote-badge" id="pause-votes">0/2</span>
+        </button>
+        <button class="btn btn-skip" id="btn-skip" onclick="voteSkip()">
+          ⏭ Pular <span class="vote-badge" id="skip-votes">0/2</span>
+        </button>
+      </div>
+      <button class="btn btn-resume" id="btn-resume" onclick="voteResume()" style="display:none">
+        ▶ Continuar <span class="vote-badge" id="resume-votes">0/2</span>
+      </button>
+
       <div class="opponent-status" id="opponent-status">Oponente pensando<span class="waiting-dots"></span></div>
     </div>
 
-    <!-- REVEAL SCREEN -->
+    <!-- REVEAL -->
     <div id="reveal-screen" class="screen">
       <div class="result-banner" id="result-banner">
         <div class="result-emoji" id="result-emoji"></div>
         <div class="result-label" id="result-label"></div>
       </div>
-      <div style="margin-bottom:20px">
-        <p style="font-size:11px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px">Resposta certa:</p>
-        <div id="correct-answer-display" style="background:rgba(34,197,94,0.1);border:2px solid var(--green);border-radius:12px;padding:16px 20px;font-weight:700;font-size:16px;color:var(--green)"></div>
-        <div id="explanation-display" style="margin-top:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);font-family:'Space Mono',monospace;line-height:1.6;display:none"></div>
+      <div style="margin-bottom:14px">
+        <p style="font-size:10px;letter-spacing:2px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:10px">Resposta certa:</p>
+        <div id="correct-answer-display" style="background:rgba(34,197,94,0.1);border:2px solid var(--green);border-radius:12px;padding:14px 16px;font-weight:700;font-size:15px;color:var(--green)"></div>
+        <div id="explanation-display" style="margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;line-height:1.6;display:none"></div>
       </div>
       <div id="reveal-scores"></div>
       <div class="next-timer" id="next-timer"></div>
     </div>
 
-    <!-- GAME OVER SCREEN -->
+    <!-- ENDING COUNTDOWN -->
+    <div id="ending-screen" class="screen">
+      <p class="ending-label">Fim de jogo em</p>
+      <div class="ending-count" id="ending-count">10</div>
+      <p class="ending-label" style="margin-top:8px">Calculando resultado<span class="waiting-dots"></span></p>
+      <div class="ending-scores" id="ending-scores"></div>
+    </div>
+
+    <!-- GAME OVER -->
     <div id="gameover-screen" class="screen">
       <div class="winner-display">
         <div class="winner-trophy" id="winner-trophy">🏆</div>
@@ -588,24 +697,35 @@
         <div class="winner-name" id="winner-name"></div>
       </div>
       <div id="final-scores" class="card" style="margin-top:0"></div>
-      <button class="btn btn-primary" style="margin-top:20px" onclick="location.reload()">Jogar de Novo</button>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="location.reload()">Jogar de Novo</button>
     </div>
 
   </div>
+
+  <footer>
+    PERGUNTANDO BRABO · Criado por <span>Lucas Maia</span>
+  </footer>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
     let myCode = '';
-    let myId = socket.id;
     let timerInterval = null;
     let nextInterval = null;
+    let endingInterval = null;
     let myAnswer = null;
+    let isPaused = false;
+    let pausedRemaining = 60;
+    let currentOptions = [];
+    let myPauseVoted = false;
+    let mySkipVoted = false;
+    let myResumeVoted = false;
 
     // HELPERS
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
     }
     function showError(elId, msg) {
       const el = document.getElementById(elId);
@@ -639,7 +759,6 @@
           <span class="player-status">${p.ready ? '✓ Pronto' : 'Aguardando...'}</span>`;
         el.appendChild(div);
       });
-      // Add empty slot if only 1 player
       if (Object.keys(players).length < 2) {
         const div = document.createElement('div');
         div.className = 'player-item';
@@ -654,7 +773,6 @@
       document.getElementById('ready-btn').textContent = '✓ Pronto!';
       socket.emit('player_ready', { code: myCode });
     }
-
     function leaveGame() { location.reload(); }
 
     // COUNTDOWN
@@ -670,14 +788,27 @@
     }
 
     // QUESTION
-    let totalTime = 60;
     function startQuestion(data) {
       myAnswer = null;
+      isPaused = false;
+      myPauseVoted = false;
+      mySkipVoted = false;
+      myResumeVoted = false;
       showScreen('question-screen');
+
       document.getElementById('q-counter').textContent = `PERGUNTA ${data.index + 1} / ${data.total}`;
       document.getElementById('q-text').textContent = data.question;
       document.getElementById('opponent-status').textContent = 'Oponente pensando...';
       document.getElementById('opponent-status').classList.remove('answered');
+      document.getElementById('paused-banner').classList.remove('show');
+      document.getElementById('btn-pause').style.display = '';
+      document.getElementById('btn-skip').style.display = '';
+      document.getElementById('btn-resume').style.display = 'none';
+      document.getElementById('pause-votes').textContent = '0/2';
+      document.getElementById('skip-votes').textContent = '0/2';
+      document.getElementById('resume-votes').textContent = '0/2';
+      document.getElementById('btn-pause').classList.remove('voted');
+      document.getElementById('btn-skip').classList.remove('voted');
 
       // Options
       const grid = document.getElementById('options-grid');
@@ -688,19 +819,18 @@
         btn.className = 'option-btn';
         btn.id = `opt-${i}`;
         btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
-        btn.onclick = () => submitAnswer(i, data);
+        btn.onclick = () => submitAnswer(i);
         grid.appendChild(btn);
       });
 
       // Timer
       if (timerInterval) clearInterval(timerInterval);
-      totalTime = data.timeLimit;
-      let remaining = totalTime;
-      updateTimer(remaining, totalTime);
-
+      let remaining = data.timeLimit;
+      updateTimer(remaining, data.timeLimit);
       timerInterval = setInterval(() => {
+        if (isPaused) return;
         remaining--;
-        updateTimer(remaining, totalTime);
+        updateTimer(remaining, data.timeLimit);
         if (remaining <= 0) clearInterval(timerInterval);
       }, 1000);
     }
@@ -716,19 +846,40 @@
         bar.style.background = 'var(--red)';
       } else if (remaining <= 20) {
         bar.style.background = 'var(--yellow)';
+        el.classList.remove('danger');
       } else {
         el.classList.remove('danger');
         bar.style.background = 'var(--accent)';
       }
     }
 
-    function submitAnswer(index, questionData) {
-      if (myAnswer !== null) return;
+    function submitAnswer(index) {
+      if (myAnswer !== null || isPaused) return;
       myAnswer = index;
-      // Visual feedback
       document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
       document.getElementById(`opt-${index}`).classList.add('selected');
+      document.getElementById('btn-pause').disabled = true;
+      document.getElementById('btn-skip').disabled = true;
       socket.emit('submit_answer', { code: myCode, answer: index });
+    }
+
+    // PAUSE / SKIP / RESUME
+    function votePause() {
+      if (myPauseVoted || isPaused) return;
+      myPauseVoted = true;
+      document.getElementById('btn-pause').classList.add('voted');
+      socket.emit('vote_pause', { code: myCode });
+    }
+    function voteSkip() {
+      if (mySkipVoted) return;
+      mySkipVoted = true;
+      document.getElementById('btn-skip').classList.add('voted');
+      socket.emit('vote_skip', { code: myCode });
+    }
+    function voteResume() {
+      if (myResumeVoted) return;
+      myResumeVoted = true;
+      socket.emit('vote_resume', { code: myCode });
     }
 
     // REVEAL
@@ -736,13 +887,11 @@
       if (timerInterval) clearInterval(timerInterval);
       showScreen('reveal-screen');
 
-      const myId = socket.id;
-      const myResult = data.results[myId];
+      const myResult = data.results[socket.id];
       const banner = document.getElementById('result-banner');
       const emoji = document.getElementById('result-emoji');
       const label = document.getElementById('result-label');
 
-      // All wrong = yellow, my correct = green, my wrong = red
       if (data.roundResult === 'all_wrong') {
         banner.className = 'result-banner draw';
         emoji.textContent = '🤷';
@@ -751,18 +900,20 @@
         banner.className = 'result-banner win';
         emoji.textContent = '🎯';
         label.textContent = 'ACERTOU!';
+      } else if (myResult && myResult.didNotAnswer) {
+        banner.className = 'result-banner lose';
+        emoji.textContent = '⏰';
+        label.textContent = 'TEMPO ESGOTADO!';
       } else {
         banner.className = 'result-banner lose';
         emoji.textContent = '💀';
         label.textContent = 'ERROU!';
       }
 
-      // Correct answer
       const letters = ['A', 'B', 'C', 'D'];
-      // We need question options — stored via current question
-      document.getElementById('correct-answer-display').textContent = `${letters[data.correctIndex]} — ${currentOptions[data.correctIndex]}`;
+      document.getElementById('correct-answer-display').textContent =
+        `${letters[data.correctIndex]} — ${currentOptions[data.correctIndex]}`;
 
-      // Explanation from AI
       const expEl = document.getElementById('explanation-display');
       if (data.explanation) {
         expEl.textContent = '💡 ' + data.explanation;
@@ -771,7 +922,6 @@
         expEl.style.display = 'none';
       }
 
-      // Scores
       const scoresEl = document.getElementById('reveal-scores');
       scoresEl.innerHTML = '';
       Object.values(data.players).forEach(p => {
@@ -779,14 +929,17 @@
         div.className = 'score-row';
         const score = data.scores[p.id] || 0;
         const res = data.results[p.id];
-        let icon = res ? (res.correct ? '✓' : '✗') : '–';
-        let color = res ? (res.correct ? 'var(--green)' : 'var(--red)') : 'var(--muted)';
-        div.innerHTML = `<span class="s-name">${p.name} <span style="color:${color};font-size:18px">${icon}</span></span>
+        let icon = '–', color = 'var(--muted)';
+        if (res) {
+          if (res.didNotAnswer) { icon = '⏰'; color = 'var(--yellow)'; }
+          else if (res.correct) { icon = '✓'; color = 'var(--green)'; }
+          else { icon = '✗'; color = 'var(--red)'; }
+        }
+        div.innerHTML = `<span class="s-name">${p.name} <span style="color:${color};font-size:16px">${icon}</span></span>
           <span class="s-points">${score}</span>`;
         scoresEl.appendChild(div);
       });
 
-      // Countdown to next
       let sec = 30;
       const nextEl = document.getElementById('next-timer');
       nextEl.textContent = `Próxima pergunta em ${sec}s`;
@@ -798,67 +951,112 @@
       }, 1000);
     }
 
-    let currentOptions = [];
+    // ENDING COUNTDOWN
+    function showEnding(data) {
+      if (nextInterval) clearInterval(nextInterval);
+      showScreen('ending-screen');
+
+      let sec = data.countdown || 10;
+      document.getElementById('ending-count').textContent = sec;
+
+      // Show scores in ending screen
+      const el = document.getElementById('ending-scores');
+      el.innerHTML = '';
+      Object.values(data.players).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'score-row';
+        div.innerHTML = `<span class="s-name">${p.name}</span>
+          <span class="s-points">${data.scores[p.id] || 0} pts</span>`;
+        el.appendChild(div);
+      });
+
+      if (endingInterval) clearInterval(endingInterval);
+      endingInterval = setInterval(() => {
+        sec--;
+        document.getElementById('ending-count').textContent = sec;
+        if (sec <= 0) clearInterval(endingInterval);
+      }, 1000);
+    }
 
     // SOCKET EVENTS
     socket.on('room_created', ({ code, players }) => {
       myCode = code;
-      myId = socket.id;
       document.getElementById('lobby-code').textContent = code;
       renderPlayers(players);
       showScreen('lobby-screen');
     });
-
     socket.on('room_joined', ({ code, players }) => {
       myCode = code;
-      myId = socket.id;
       document.getElementById('lobby-code').textContent = code;
       renderPlayers(players);
       showScreen('lobby-screen');
     });
+    socket.on('player_joined', ({ players }) => renderPlayers(players));
+    socket.on('player_ready_update', ({ players }) => renderPlayers(players));
 
-    socket.on('player_joined', ({ players }) => {
-      renderPlayers(players);
-    });
-
-    socket.on('player_ready_update', ({ players }) => {
-      renderPlayers(players);
-    });
-
-    socket.on('generating_questions', () => {
-      showScreen('generating-screen');
-    });
-
+    socket.on('generating_questions', () => showScreen('generating-screen'));
     socket.on('generating_fallback', () => {
       const sub = document.querySelector('#generating-screen .generating-sub');
-      if (sub) sub.textContent = 'Usando banco de perguntas local...';
+      if (sub) sub.textContent = 'Usando banco local de perguntas...';
     });
 
-    socket.on('game_countdown', ({ seconds }) => {
-      startCountdown(seconds);
-    });
+    socket.on('game_countdown', ({ seconds }) => startCountdown(seconds));
 
     socket.on('question_start', (data) => {
       currentOptions = data.options;
       startQuestion(data);
     });
 
-    socket.on('answer_received', () => {
-      // My answer confirmed
-    });
-
+    socket.on('answer_received', () => {});
     socket.on('opponent_answered', () => {
       const el = document.getElementById('opponent-status');
       el.textContent = '✓ Oponente respondeu!';
       el.classList.add('answered');
     });
 
-    socket.on('reveal_answer', (data) => {
-      showReveal(data);
+    // PAUSE events
+    socket.on('pause_vote_update', ({ votes, needed, voters }) => {
+      document.getElementById('pause-votes').textContent = `${votes}/${needed}`;
+    });
+    socket.on('game_paused', ({ remaining }) => {
+      isPaused = true;
+      pausedRemaining = remaining;
+      document.getElementById('paused-remaining').textContent = remaining;
+      document.getElementById('paused-banner').classList.add('show');
+      document.getElementById('btn-pause').style.display = 'none';
+      document.getElementById('btn-skip').style.display = 'none';
+      document.getElementById('btn-resume').style.display = '';
+      document.getElementById('resume-votes').textContent = '0/2';
+      myResumeVoted = false;
+    });
+    socket.on('resume_vote_update', ({ votes, needed }) => {
+      document.getElementById('resume-votes').textContent = `${votes}/${needed}`;
+    });
+    socket.on('game_resumed', ({ remaining }) => {
+      isPaused = false;
+      document.getElementById('paused-banner').classList.remove('show');
+      document.getElementById('btn-resume').style.display = 'none';
+      if (myAnswer === null) {
+        document.getElementById('btn-pause').style.display = '';
+        document.getElementById('btn-skip').style.display = '';
+      }
+      myPauseVoted = false;
+      mySkipVoted = false;
+      document.getElementById('pause-votes').textContent = '0/2';
+      document.getElementById('skip-votes').textContent = '0/2';
     });
 
+    // SKIP events
+    socket.on('skip_vote_update', ({ votes, needed }) => {
+      document.getElementById('skip-votes').textContent = `${votes}/${needed}`;
+    });
+
+    socket.on('reveal_answer', (data) => showReveal(data));
+
+    socket.on('game_ending', (data) => showEnding(data));
+
     socket.on('game_over', (data) => {
-      if (nextInterval) clearInterval(nextInterval);
+      if (endingInterval) clearInterval(endingInterval);
       showScreen('gameover-screen');
 
       const trophy = document.getElementById('winner-trophy');
@@ -893,19 +1091,15 @@
     socket.on('player_left', ({ players }) => {
       if (Object.keys(players).length === 0) return;
       renderPlayers(players);
-      // If in game, show message
-      const activeScreen = document.querySelector('.screen.active');
-      if (activeScreen && ['question-screen', 'reveal-screen'].includes(activeScreen.id)) {
+      const active = document.querySelector('.screen.active');
+      if (active && ['question-screen','reveal-screen','ending-screen'].includes(active.id)) {
         alert('Oponente saiu do jogo!');
         location.reload();
       }
     });
 
-    socket.on('error', ({ message }) => {
-      showError('home-error', message);
-    });
+    socket.on('error', ({ message }) => showError('home-error', message));
 
-    // Enter key support
     document.getElementById('room-code-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') joinRoom();
     });
